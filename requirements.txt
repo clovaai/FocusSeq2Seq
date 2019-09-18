@@ -1,0 +1,6 @@
+torch >= 1.0
+nltk
+pandas
+tqdm
+pyyaml
+pyrouge
