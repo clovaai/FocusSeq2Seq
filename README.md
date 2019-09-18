@@ -1,6 +1,6 @@
 ## Mixture Content Selection for Diverse Sequence Generation
 
-* Authors: [Jaemin Cho](http://j-min.io), [Minjoon Seo](https://seominjoon.github.io), [Hannaneh Hajishirzi](https://homes.cs.washington.edu/~hannaneh/)
+* Authors: [Jaemin Cho](https://j-min.io), [Minjoon Seo](https://seominjoon.github.io), [Hannaneh Hajishirzi](https://homes.cs.washington.edu/~hannaneh/)
 * [Paper](https://arxiv.org/abs/1909.01953) (To appear in [EMNLP 2019](https://emnlp-ijcnlp2019.org))
 
 We *explicitly separate diversification from generation* using a mixture-of-experts content selection module (called **Selector**) that guides an encoder-decoder model.
@@ -16,8 +16,8 @@ Not only does this improve **diversity** of the generated sequences, but also im
 # Prerequisites
 
 ## 1) Hardware
-* All experiments in paper were conducted with single P40 GPU (24GB) and 20+ CPUs.
-* You might want to adjust the size of batch, models and number of workers for your memory size and number of CPUs.
+* All experiments in paper were conducted with single P40 GPU (24GB).
+* You might want to adjust the size of batch and models for your memory size.
 
 ## 2) Software
 * Ubuntu 16.04 or 18.04 (Not tested with other versions, but might work)
