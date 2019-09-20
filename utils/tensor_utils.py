@@ -19,12 +19,3 @@ def repeat(tensor, K):
             for _ in range(K):
                 out.append(x.copy())
         return out
-
-
-def frobenius(mat):
-    assert mat.dim() == 3, 'matrix for computing Frobenius norm should be with 3 dims'
-    B, K, K = mat.size()
-
-    ret = (mat.pow(2).sum(1).sum(1) + 1e-10).sqrt()  # [B]
-    # ret = (torch.sum(torch.sum((mat ** 2), 1), 2).squeeze() + 1e-10) ** 0.5
-    return ret.mean()
