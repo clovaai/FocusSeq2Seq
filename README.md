@@ -54,9 +54,10 @@ python CNNDM_data_loader.py
 ```
 Details of dataset source are at [Dataset_details.md](Dataset_details.md)
 
-# Run (Train & Evaluation)
+# Run
 You can see more configurations in [configs.py](configs.py)
 
+## Train
 1) Question Generation
 ```sh
 python train.py --task=QG --model=NQG --load_glove=True --feature_rich --data=squad \
@@ -72,6 +73,28 @@ python train.py --task=SM --model=PG --load_glove=False --data=cnndm \
     --batch_size=16 --eval_batch_size=64 \
     --use_focus=True --n_mixture=3 --decoding=greedy
 ```
+
+## Evaluation
+`--load_ckpt (integer; 5 for example)` and `--eval_only` options need to be added.
+
+1) Question Generation
+```sh
+python evaluate.py --task=QG --model=NQG --load_glove=True --feature_rich --data=squad \
+    --rnn=GRU --dec_hidden_size=512 --dropout=0.5 \
+    --batch_size=64 --eval_batch_size=64 \
+    --use_focus=True --n_mixture=3 --decoding=greedy \
+    --load_ckpt=5 --eval_only
+```
+
+2) Abstract Summrization
+```sh
+python evaluate.py --task=SM --model=PG --load_glove=False --data=cnndm \
+    --rnn=LSTM --dec_hidden_size=512 \
+    --batch_size=16 --eval_batch_size=64 \
+    --use_focus=True --n_mixture=3 --decoding=greedy \
+    --load_ckpt=5 --eval_only
+```
+
 
 # Reference
 If you use this code or model as part of any published research, please refer the following paper.

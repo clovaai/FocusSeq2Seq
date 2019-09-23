@@ -61,24 +61,24 @@ def evaluate(loader, model, epoch, config, test=False):
         for batch_idx, batch in enumerate(loader):
             if config.task == 'QG':
                 source_WORD_encoding, source_len, \
-                target_WORD_encoding, target_len, \
-                source_WORD, target_WORD, \
-                answer_position_BIO_encoding, answer_WORD, \
-                ner, ner_encoding, \
-                pos, pos_encoding, \
-                case, case_encoding, \
-                focus_WORD, focus_mask, \
-                focus_input, answer_WORD_encoding, \
-                source_WORD_encoding_extended, oovs \
+                    target_WORD_encoding, target_len, \
+                    source_WORD, target_WORD, \
+                    answer_position_BIO_encoding, answer_WORD, \
+                    ner, ner_encoding, \
+                    pos, pos_encoding, \
+                    case, case_encoding, \
+                    focus_WORD, focus_mask, \
+                    focus_input, answer_WORD_encoding, \
+                    source_WORD_encoding_extended, oovs \
                     = [b.to(device) if isinstance(b, torch.Tensor) else b for b in batch]
 
             elif config.task == 'SM':
                 source_WORD_encoding, source_len, \
-                target_WORD_encoding, target_len, \
-                source_WORD, target_WORD, \
-                focus_WORD, focus_mask, \
-                focus_input, \
-                source_WORD_encoding_extended, oovs \
+                    target_WORD_encoding, target_len, \
+                    source_WORD, target_WORD, \
+                    focus_WORD, focus_mask, \
+                    focus_input, \
+                    source_WORD_encoding_extended, oovs \
                     = [b.to(device) if isinstance(b, torch.Tensor) else b for b in batch]
                 answer_position_BIO_encoding = answer_WORD = ner_encoding = pos_encoding = case_encoding = None
                 answer_WORD_encoding = None
@@ -119,7 +119,7 @@ def evaluate(loader, model, epoch, config, test=False):
                             source_WORD_encoding_extended = repeat(
                                 source_WORD_encoding_extended, config.n_mixture)
                             assert source_WORD_encoding.size(0) \
-                                   == source_WORD_encoding_extended.size(0)
+                                == source_WORD_encoding_extended.size(0)
 
                     input_mask = generated_focus_mask
 
@@ -156,7 +156,7 @@ def evaluate(loader, model, epoch, config, test=False):
 
             # Word IDs => Words
             for batch_j, (predicted_word_ids, source_words, target_words) \
-                in enumerate(zip(prediction, source_WORD, target_WORD)):
+                    in enumerate(zip(prediction, source_WORD, target_WORD)):
                 if config.n_mixture > 1:
                     assert config.decode_k == 1
                     for n in range(config.n_mixture):
@@ -443,4 +443,41 @@ def evaluate(loader, model, epoch, config, test=False):
 
 
 if __name__ == '__main__':
-    pass
+    from pathlib import Path
+    current_dir = Path(__file__).resolve().parent
+
+    import configs
+    config = configs.get_config()
+    print(config)
+
+    from build_utils import get_loader, build_model, get_ckpt_name
+
+    # Build Data Loader
+    data_dir = current_dir.joinpath(config.data + '_out')
+    _, _, test_loader, word2id, id2word = get_loader(
+        config, data_dir)
+
+    # Build Model
+    model = build_model(config, word2id, id2word)
+    model.to(device)
+
+    # Load Model from checkpoint
+    ckpt_dir = Path(f"./ckpt/{config.model}/").resolve()
+    filename = get_ckpt_name(config)
+    filename += f"_epoch{config.load_ckpt}.pkl"
+    ckpt_path = ckpt_dir.joinpath(filename)
+    ckpt = torch.load(ckpt_path)
+    model.load_state_dict(ckpt['model'])
+    print('Loaded model from', ckpt_path)
+
+    # Run Evaluation
+    metric_result, hypotheses, best_hypothesis, hyp_focus, hyp_attention = evaluate(
+        test_loader, model, config.load_ckpt, config, test=True)
+
+    # Save evaluation results at the same checkpoint
+    ckpt['best_hypothesis'] = best_hypothesis
+    ckpt['hypotheses'] = hypotheses
+    ckpt['test_df'] = test_loader.dataset.df
+    ckpt['focus_p'] = hyp_focus
+    ckpt['attention'] = hyp_attention
+    torch.save(ckpt, ckpt_path)
