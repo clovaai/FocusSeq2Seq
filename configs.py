@@ -58,9 +58,6 @@ def get_config(parse=True, **optional_kwargs):
     """
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--load', action='store_true')
-    parser.add_argument('--load_ckpt', type=int, default=9)
-
     # Task / Model / Data
     parser.add_argument('--task', type=str, default='QG',
                         choices=['QG', 'SM'],
@@ -94,6 +91,7 @@ def get_config(parse=True, **optional_kwargs):
 
     # Evaluation
     parser.add_argument('--eval_only', action='store_true')
+    parser.add_argument('--load_ckpt', type=int, default=9)
     parser.add_argument('--eval_batch_size', type=int, default=32,
                         help='batch size during evaluation')
     parser.add_argument('--val_data_size', type=int, default=1000,
