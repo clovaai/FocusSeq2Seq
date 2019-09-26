@@ -1,0 +1,9 @@
+cnndm/
+glove/
+squad/
+squad_out/
+utils/rouge/RELEASE-1.5.5/
+*.zip
+*.pkl
+*__pycache__
+*.pyc
