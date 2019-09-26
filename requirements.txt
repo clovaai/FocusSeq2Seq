@@ -3,4 +3,4 @@ nltk
 pandas
 tqdm
 pyyaml
-pyrouge
+git+git://github.com/bheinzerling/pyrouge

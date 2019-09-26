@@ -29,7 +29,7 @@ Not only does this improve **diversity** of the generated sequences, but also im
   pandas
   tqdm
   pyyaml
-  pyrouge
+  git+git://github.com/bheinzerling/pyrouge
   ```
 * ROUGE-1.5.5 (for CNN-DM evaluation)
   ```sh
