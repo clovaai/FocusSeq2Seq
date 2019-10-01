@@ -24,7 +24,7 @@ Not only does this improve **diversity** of the generated sequences, but also im
 * Python 3.6+
   - `pip install -r requirements.txt` or manually install the packages below.
   ```
-  torch >= 1.0
+  torch==1.1
   nltk
   pandas
   tqdm
