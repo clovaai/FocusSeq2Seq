@@ -467,11 +467,6 @@ class NQGDecoder(nn.Module):
                     log_p_sampled.masked_fill_(finished, 0)
                     score += log_p_sampled
 
-                    generated_eos = predicted_word_id == EOS_ID
-                    if generated_eos.any():
-                        finished += generated_eos
-                        finished.clamp_(0, 1)
-
                     where_oov = predicted_word_id >= self.vocab_size
                     dec_input_word = predicted_word_id.masked_fill(
                         where_oov, UNK_ID)
