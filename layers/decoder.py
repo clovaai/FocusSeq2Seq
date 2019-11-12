@@ -136,35 +136,6 @@ class PGReadout(nn.Module):
         return energy
 
 
-class ASReadout(nn.Module):
-    def __init__(self, enc_hidden_size=350, dec_hidden_size=350, embed_size=300,
-                 vocab_size=34000, dropout_p=0.4, tie=True):
-        super().__init__()
-
-        self.tie = tie
-
-        self.Wq = nn.Linear(enc_hidden_size + dec_hidden_size, dec_hidden_size, bias=False)
-        # self.dropout = nn.Dropout(dropout_p)
-        self.tanh = nn.Tanh()
-        self.Wa = nn.Linear(dec_hidden_size, embed_size, bias=False)
-        self.Wo = nn.Linear(embed_size, vocab_size, bias=False)
-
-    def forward(self, context, decoder_state):
-        # [B, hidden_size] | [B, hidden_size]
-        # => [B, hidden_size]
-        q = self.Wq(torch.cat([context, decoder_state], dim=1))
-        q = self.tanh(q)
-        # q = self.dropout(q)
-
-        # => [B, embed_size]
-        r = self.Wa(q)
-
-        # => [B, vocab_size]
-        energy = self.Wo(r)
-
-        return energy
-
-
 class NQGDecoder(nn.Module):
     def __init__(self, embed_size=300, enc_hidden_size=512, dec_hidden_size=512,
                  attention_size=512,
