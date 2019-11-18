@@ -2,14 +2,15 @@
 
 * Authors: [Jaemin Cho](https://j-min.io), [Minjoon Seo](https://seominjoon.github.io), [Hannaneh Hajishirzi](https://homes.cs.washington.edu/~hannaneh/)
 * [Paper](https://arxiv.org/abs/1909.01953) (To appear in [EMNLP 2019](https://emnlp-ijcnlp2019.org))
+* [Poster](_imgs/EMNLP19_Focus_portrait_v3.pdf)
 
-We *explicitly separate diversification from generation* using a mixture-of-experts content selection module (called **Selector**) that guides an encoder-decoder model.
+We explicitly separate **diversification** from **generation** using a mixture-of-experts content selection module (called **Selector**) that guides an encoder-decoder model.
 
 ![methods_figure](_imgs/methods_horizontal.png)
 
-1.  During diversification stage, Selector samples different binary masks (called **focus**; m1, m2, and m3 in the figure) on a source sequence.
+1. **Diverse Content Selection (one-to-many)**: Selector samples different binary masks (called **focus**; m1, m2, and m3 in the figure) on a source sequence.
 
-2.  During generation stage, an encoder-decoder model generates different sequences from the source sequence guided by different masks.
+2. **Focused Generation (one-to-one)**: an encoder-decoder model generates different sequences from the source sequence guided by different masks.
 
 Not only does this improve **diversity** of the generated sequences, but also improves **accuracy** (high fidelity) of them, since conventional models often learn suboptimal mapping that is in the middle of the targets but not near any of them.
 
